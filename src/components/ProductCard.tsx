@@ -4,6 +4,7 @@ import { ShoppingCart, Heart } from 'lucide-react';
 import { Product } from '../types';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
+import { useWishlist } from '../contexts/WishlistContext';
 import { useNavigate } from 'react-router-dom';
 
 interface ProductCardProps {
@@ -13,7 +14,9 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart, loading } = useCart();
   const { user } = useAuth();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const navigate = useNavigate();
+  const isWishlisted = isInWishlist(product.id);
 
   const discountedPrice = product.discount_percentage 
     ? product.price - (product.price * product.discount_percentage / 100)
@@ -25,6 +28,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       return;
     }
     addToCart(product);
+  };
+
+  const handleWishlistToggle = () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    if (isWishlisted) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
   };
 
   const categoryColors = {
@@ -74,9 +89,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <motion.button 
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
+          onClick={handleWishlistToggle}
           className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all duration-300"
         >
-          <Heart size={16} className="text-gray-600" />
+          <Heart 
+            size={16} 
+            className={`transition-colors duration-300 ${
+              isWishlisted 
+                ? 'text-red-500 fill-red-500' 
+                : 'text-gray-600 hover:text-red-500'
+            }`}
+          />
         </motion.button>
       </div>
 
