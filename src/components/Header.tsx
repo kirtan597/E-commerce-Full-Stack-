@@ -4,6 +4,7 @@ import { ShoppingCart, User, Search, Menu, X, Github, Sparkles } from 'lucide-re
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
+import { useWishlist } from '../contexts/WishlistContext';
 import { mockAuth } from '../utils/mockAuth';
 import toast from 'react-hot-toast';
 
@@ -12,6 +13,7 @@ export const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const { user, isAdmin } = useAuth();
   const { totalItems } = useCart();
+  const { totalWishlistItems } = useWishlist();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -85,6 +87,21 @@ export const Header: React.FC = () => {
             <motion.div whileHover={{ y: -3, scale: 1.05 }}>
               <Link to="/products" className="text-white/90 hover:text-white transition-all duration-300 font-semibold px-4 py-2 rounded-xl hover:bg-white/20 backdrop-blur-sm">
               🛒 Products
+              </Link>
+            </motion.div>
+            
+            <motion.div whileHover={{ y: -3, scale: 1.05 }}>
+              <Link to="/wishlist" className="relative text-white/90 hover:text-white transition-all duration-300 font-semibold px-4 py-2 rounded-xl hover:bg-white/20 backdrop-blur-sm">
+              ❤️ Wishlist
+              {totalWishlistItems > 0 && (
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center shadow-lg font-bold"
+                >
+                  {totalWishlistItems}
+                </motion.span>
+              )}
               </Link>
             </motion.div>
             
@@ -213,6 +230,10 @@ export const Header: React.FC = () => {
             <nav className="flex flex-col space-y-4">
               <Link to="/products" className="text-white/90 hover:text-white transition-all duration-300 py-2 px-4 rounded-xl hover:bg-white/20 block">
                 🛒 Products
+              </Link>
+              
+              <Link to="/wishlist" className="text-white/90 hover:text-white transition-all duration-300 py-2 px-4 rounded-xl hover:bg-white/20 block">
+                ❤️ Wishlist {totalWishlistItems > 0 && `(${totalWishlistItems})`}
               </Link>
               
               <a 
