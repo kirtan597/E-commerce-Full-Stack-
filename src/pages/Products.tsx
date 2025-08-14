@@ -1,89 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Filter, Grid, List } from 'lucide-react';
+import { Filter, Grid, List, ArrowLeft } from 'lucide-react';
 import { ProductCard } from '../components/ProductCard';
 import { Product } from '../types';
 import { supabase } from '../lib/supabase';
+import { generateProducts } from '../utils/productGenerator';
 
 const categories = ['All', 'Electronics', 'Clothing', 'Books', 'Home', 'Sports', 'Photography'];
 
-// Mock products for demo
-const mockProducts: Product[] = [
-  {
-    id: '1',
-    name: 'Premium Wireless Headphones',
-    description: 'High-quality sound with noise cancellation technology',
-    price: 24899,
-    image_url: 'https://images.pexels.com/photos/3945667/pexels-photo-3945667.jpeg?auto=compress&cs=tinysrgb&w=400',
-    category: 'Electronics',
-    stock_quantity: 25,
-    discount_percentage: 20,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: '2',
-    name: 'Smart Watch Series X',
-    description: 'Advanced fitness tracking with heart rate monitoring',
-    price: 33199,
-    image_url: 'https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?auto=compress&cs=tinysrgb&w=400',
-    category: 'Electronics',
-    stock_quantity: 15,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: '3',
-    name: 'Organic Cotton T-Shirt',
-    description: 'Comfortable and sustainable everyday wear',
-    price: 2499,
-    image_url: 'https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg?auto=compress&cs=tinysrgb&w=400',
-    category: 'Clothing',
-    stock_quantity: 50,
-    discount_percentage: 15,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: '4',
-    name: 'Professional Camera Lens',
-    description: 'Perfect for professional photography and videography',
-    price: 58099,
-    image_url: 'https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=400',
-    category: 'Photography',
-    stock_quantity: 8,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: '5',
-    name: 'Running Shoes',
-    description: 'Lightweight and comfortable for all-day wear',
-    price: 10799,
-    image_url: 'https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=400',
-    category: 'Sports',
-    stock_quantity: 30,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: '6',
-    name: 'Modern Table Lamp',
-    description: 'Stylish lighting for your home office',
-    price: 7499,
-    image_url: 'https://images.pexels.com/photos/1166644/pexels-photo-1166644.jpeg?auto=compress&cs=tinysrgb&w=400',
-    category: 'Home',
-    stock_quantity: 20,
-    discount_percentage: 10,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-];
-
 export const Products: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const [products, setProducts] = useState<Product[]>(mockProducts);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('name');
@@ -98,9 +26,8 @@ export const Products: React.FC = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      // For demo purposes, we'll use mock data
-      // In a real app, this would fetch from Supabase
-      setProducts(mockProducts);
+      const generatedProducts = generateProducts(80);
+      setProducts(generatedProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -138,20 +65,34 @@ export const Products: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 py-8">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {searchQuery ? `Search Results for "${searchQuery}"` : 'All Products'}
-          </h1>
-          <p className="text-gray-600">
-            {filteredAndSortedProducts.length} products found
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
+          <div className="flex items-center justify-center mb-4">
+            <Link to="/" className="absolute left-2 sm:left-4 back-button-rgb backdrop-blur-sm text-white p-3 sm:p-4 rounded-2xl hover:scale-110 transition-all duration-300 shadow-lg edge-glow">
+              <ArrowLeft size={24} className="sm:w-6 sm:h-6" />
+            </Link>
+            <h1 className="text-5xl font-bold rainbow-bg bg-clip-text text-transparent">
+              {searchQuery ? `Search Results for "${searchQuery}"` : '🛍️ All Products'}
+            </h1>
+          </div>
+          <p className="text-gray-700 text-lg text-center">
+            {filteredAndSortedProducts.length} amazing products found
           </p>
-        </div>
+        </motion.div>
 
         {/* Filters and Controls */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 mb-8 border border-white/20"
+        >
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             {/* Categories */}
             <div className="flex flex-wrap gap-2">
@@ -159,10 +100,10 @@ export const Products: React.FC = () => {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                     selectedCategory === category
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      ? 'rainbow-bg text-white shadow-lg transform scale-105'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 hover:scale-105'
                   }`}
                 >
                   {category}
@@ -176,7 +117,7 @@ export const Products: React.FC = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white/80 backdrop-blur-sm transition-all duration-300"
               >
                 <option value="name">Sort by Name</option>
                 <option value="price-low">Price: Low to High</option>
@@ -187,20 +128,20 @@ export const Products: React.FC = () => {
               <div className="flex border border-gray-300 rounded-lg overflow-hidden">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-2 ${viewMode === 'grid' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700'}`}
+                  className={`p-2 transition-all duration-300 ${viewMode === 'grid' ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
                 >
                   <Grid size={20} />
                 </button>
                 <button
                   onClick={() => setViewMode('list')}
-                  className={`p-2 ${viewMode === 'list' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700'}`}
+                  className={`p-2 transition-all duration-300 ${viewMode === 'list' ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
                 >
                   <List size={20} />
                 </button>
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Products Grid */}
         {filteredAndSortedProducts.length === 0 ? (

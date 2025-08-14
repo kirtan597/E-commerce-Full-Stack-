@@ -13,7 +13,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
+      <h1 className="text-xl sm:text-3xl font-bold rainbow-bg bg-clip-text text-transparent mb-4">📊 Dashboard Overview</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
@@ -68,7 +68,7 @@ const AdminProducts = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Products Management</h1>
+        <h1 className="text-xl sm:text-3xl font-bold rainbow-bg bg-clip-text text-transparent">📦 Products Management</h1>
         <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
           <Plus size={20} />
           <span>Add Product</span>
@@ -123,7 +123,7 @@ const AdminProducts = () => {
 const AdminOrders = () => {
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">Orders Management</h1>
+      <h1 className="text-xl sm:text-3xl font-bold rainbow-bg bg-clip-text text-transparent">📦 Orders Management</h1>
       <div className="bg-white rounded-xl shadow-md p-6">
         <p className="text-gray-600">Order management functionality coming soon...</p>
       </div>
@@ -141,12 +141,14 @@ export const Admin: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-indigo-400/10 via-purple-400/10 to-pink-400/10 animate-pulse"></div>
       <div className="flex">
         {/* Sidebar */}
-        <div className="w-64 bg-white shadow-lg">
+        <div className="w-16 sm:w-64 bg-white/90 backdrop-blur-sm shadow-2xl border-r border-white/20 relative z-10">
           <div className="p-6">
-            <h2 className="text-xl font-bold text-gray-900">Admin Panel</h2>
+            <h2 className="text-lg sm:text-xl font-bold rainbow-bg bg-clip-text text-transparent hidden sm:block">⚙️ Admin Panel</h2>
+            <h2 className="text-lg font-bold rainbow-bg bg-clip-text text-transparent sm:hidden text-center">⚙️</h2>
           </div>
           <nav className="px-4 pb-4">
             {navItems.map((item) => (

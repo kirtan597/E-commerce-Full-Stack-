@@ -44,7 +44,7 @@ export const Hero: React.FC = () => {
   ];
 
   return (
-    <section className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-20 overflow-hidden">
+    <section className="relative rainbow-bg py-20 overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0">
         <motion.div
@@ -73,7 +73,7 @@ export const Hero: React.FC = () => {
               >
                 <span className="text-gray-900">Shop the</span>
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 animate-pulse">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-yellow-200 to-white animate-pulse float-animation">
                   Future
                 </span>
               </motion.h1>
@@ -88,7 +88,7 @@ export const Hero: React.FC = () => {
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4">
               <Link
                 to="/products"
-                className="group relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white px-8 py-4 rounded-2xl text-lg font-semibold overflow-hidden text-center"
+                className="group relative bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white px-8 py-4 rounded-2xl text-lg font-semibold overflow-hidden text-center hover:bg-white/30 transition-all duration-300 pulse-glow"
               >
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-r from-blue-700 via-purple-700 to-pink-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
@@ -101,9 +101,9 @@ export const Hero: React.FC = () => {
               </Link>
               <Link
                 to="/products?category=featured"
-                className="group border-2 border-transparent bg-gradient-to-r from-blue-600 to-purple-600 p-0.5 rounded-2xl text-center hover:shadow-lg transition-all duration-300"
+                className="group border-2 border-white/50 bg-transparent p-0.5 rounded-2xl text-center hover:shadow-lg transition-all duration-300 hover:border-white/80"
               >
-                <div className="bg-white px-8 py-4 rounded-2xl text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:text-white transition-all duration-300">
+                <div className="bg-transparent px-8 py-4 rounded-2xl text-lg font-semibold text-white group-hover:bg-white/10 transition-all duration-300">
                 View Featured
                 </div>
               </Link>
@@ -153,7 +153,7 @@ export const Hero: React.FC = () => {
                 y: -10,
                 transition: { type: "spring", stiffness: 300 }
               }}
-              className="text-center p-6 rounded-2xl bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/20"
+              className="text-center p-6 rounded-2xl bg-white/90 backdrop-blur-sm shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/30 card-hover"
             >
               <motion.div 
                 whileHover={{ rotate: 360 }}

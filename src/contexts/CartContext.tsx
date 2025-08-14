@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { CartItem, Product } from '../types';
-import { supabase } from '../lib/supabase';
+import { mockAuth } from '../utils/mockAuth';
 import { useAuth } from './AuthContext';
 import toast from 'react-hot-toast';
+import { generateProducts } from '../utils/productGenerator';
 
 interface CartContextType {
   items: CartItem[];
@@ -53,16 +54,19 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!user) return;
 
     try {
-      const { data, error } = await supabase
-        .from('cart_items')
-        .select(`
-          *,
-          products (*)
-        `)
-        .eq('user_id', user.id);
-
-      if (error) throw error;
-      setItems(data || []);
+      const cartItems = await mockAuth.getCartItems(user.id);
+      const allProducts = generateProducts(100);
+      
+      const itemsWithProducts = cartItems.map(item => ({
+        id: item.id,
+        user_id: item.user_id,
+        product_id: item.product_id,
+        quantity: item.quantity,
+        product: allProducts.find(p => p.id === item.product_id),
+        products: allProducts.find(p => p.id === item.product_id)
+      }));
+      
+      setItems(itemsWithProducts as CartItem[]);
     } catch (error) {
       console.error('Error fetching cart items:', error);
       toast.error('Failed to load cart');
@@ -77,31 +81,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     setLoading(true);
     try {
-      // Check if item already exists in cart
-      const existingItem = items.find(item => item.product_id === product.id);
-
-      if (existingItem) {
-        // Update quantity
-        await updateQuantity(existingItem.id, existingItem.quantity + quantity);
-      } else {
-        // Add new item
-        const { data, error } = await supabase
-          .from('cart_items')
-          .insert({
-            user_id: user.id,
-            product_id: product.id,
-            quantity,
-          })
-          .select(`
-            *,
-            products (*)
-          `)
-          .single();
-
-        if (error) throw error;
-        setItems([...items, data]);
-      }
-
+      await mockAuth.addToCart(user.id, product.id, quantity);
+      await fetchCartItems();
       toast.success('Item added to cart');
     } catch (error) {
       console.error('Error adding to cart:', error);
@@ -114,12 +95,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const removeFromCart = async (itemId: string) => {
     setLoading(true);
     try {
-      const { error } = await supabase
-        .from('cart_items')
-        .delete()
-        .eq('id', itemId);
-
-      if (error) throw error;
+      await mockAuth.removeCartItem(itemId);
       setItems(items.filter(item => item.id !== itemId));
       toast.success('Item removed from cart');
     } catch (error) {
@@ -138,18 +114,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('cart_items')
-        .update({ quantity })
-        .eq('id', itemId)
-        .select(`
-          *,
-          products (*)
-        `)
-        .single();
-
-      if (error) throw error;
-      setItems(items.map(item => item.id === itemId ? data : item));
+      await mockAuth.updateCartItem(itemId, quantity);
+      setItems(items.map(item => item.id === itemId ? {...item, quantity} : item));
     } catch (error) {
       console.error('Error updating quantity:', error);
       toast.error('Failed to update quantity');
@@ -163,12 +129,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     setLoading(true);
     try {
-      const { error } = await supabase
-        .from('cart_items')
-        .delete()
-        .eq('user_id', user.id);
-
-      if (error) throw error;
+      await mockAuth.clearCart(user.id);
       setItems([]);
       toast.success('Cart cleared');
     } catch (error) {

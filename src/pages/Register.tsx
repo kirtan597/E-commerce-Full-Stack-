@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
-import { signUp } from '../lib/supabase';
+import { mockAuth } from '../utils/mockAuth';
 import toast from 'react-hot-toast';
 
 export const Register: React.FC = () => {
@@ -31,12 +31,12 @@ export const Register: React.FC = () => {
     setLoading(true);
 
     try {
-      const { error } = await signUp(email, password, fullName);
+      const { error } = await mockAuth.signUp(email, password, fullName);
       if (error) {
         toast.error(error.message);
       } else {
-        toast.success('Account created successfully! Welcome to ShopHub!');
-        navigate('/');
+        toast.success('Account created successfully! Please sign in.');
+        navigate('/login');
       }
     } catch (error) {
       toast.error('An error occurred during registration');
@@ -46,7 +46,7 @@ export const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 relative overflow-hidden">
+    <div className="min-h-screen rainbow-bg flex items-center justify-center py-6 sm:py-12 px-2 sm:px-4 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0">
         <motion.div
@@ -79,17 +79,17 @@ export const Register: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 100 }}
-        className="max-w-md w-full relative z-10"
+        className="max-w-sm sm:max-w-md w-full relative z-10"
       >
-        <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-white/20">
+        <div className="bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-8 border border-white/20">
           <div className="text-center mb-8">
             <motion.h2 
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent"
+              className="text-2xl sm:text-3xl font-bold text-gray-800"
             >
-              Create Account
+              Sign Up
             </motion.h2>
             <p className="text-gray-600 mt-2">Join our premium shopping experience</p>
           </div>

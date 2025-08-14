@@ -1,9 +1,17 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User } from '@supabase/supabase-js';
-import { supabase } from '../lib/supabase';
+import { mockAuth } from '../utils/mockAuth';
+
+interface MockUser {
+  id: string;
+  email: string;
+  user_metadata: {
+    full_name: string;
+  };
+  created_at: string;
+}
 
 interface AuthContextType {
-  user: User | null;
+  user: MockUser | null;
   loading: boolean;
   isAdmin: boolean;
 }
@@ -23,49 +31,16 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<MockUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    // Get initial user
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-      checkAdminStatus(user);
-      setLoading(false);
-    });
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null);
-      checkAdminStatus(session?.user ?? null);
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
+    const currentUser = mockAuth.getCurrentUser();
+    setUser(currentUser);
+    setIsAdmin(currentUser?.email === 'admin@shophub.com');
+    setLoading(false);
   }, []);
-
-  const checkAdminStatus = async (user: User | null) => {
-    if (!user) {
-      setIsAdmin(false);
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('is_admin')
-        .eq('id', user.id)
-        .single();
-
-      if (!error && data) {
-        setIsAdmin(data.is_admin || false);
-      }
-    } catch (error) {
-      console.error('Error checking admin status:', error);
-      setIsAdmin(false);
-    }
-  };
 
   return (
     <AuthContext.Provider value={{ user, loading, isAdmin }}>

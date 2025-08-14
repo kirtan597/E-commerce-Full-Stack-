@@ -22,7 +22,9 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <Router>
-          <div className="min-h-screen bg-white flex flex-col">
+          <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-teal-50 flex flex-col relative overflow-hidden">
+            <div className="absolute inset-0 rainbow-bg opacity-20 animate-pulse"></div>
+            <div className="relative z-10 min-h-screen flex flex-col">
             <Header />
             <main className="flex-1">
               <Routes>
@@ -67,6 +69,7 @@ function App() {
               </Routes>
             </main>
             <Footer />
+            </div>
           </div>
           <Toaster
             position="top-right"

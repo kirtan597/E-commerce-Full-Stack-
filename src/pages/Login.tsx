@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import { signIn } from '../lib/supabase';
+import { mockAuth } from '../utils/mockAuth';
+import { useCart } from '../contexts/CartContext';
+import { generateProducts } from '../utils/productGenerator';
 import toast from 'react-hot-toast';
 
 export const Login: React.FC = () => {
@@ -11,17 +13,33 @@ export const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { addToCart } = useCart();
+  const productId = searchParams.get('productId');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const { error } = await signIn(email, password);
+      const { error } = await mockAuth.signIn(email, password);
       if (error) {
         toast.error(error.message);
       } else {
         toast.success('Signed in successfully!');
+        window.location.reload();
+        
+        if (productId) {
+          // Add the product to cart after login
+          setTimeout(async () => {
+            const allProducts = generateProducts(100);
+            const product = allProducts.find(p => p.id === productId);
+            if (product) {
+              await addToCart(product);
+            }
+          }, 100);
+        }
+        
         navigate('/');
       }
     } catch (error) {
@@ -32,7 +50,7 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 relative overflow-hidden">
+    <div className="min-h-screen rainbow-bg flex items-center justify-center py-6 sm:py-12 px-2 sm:px-4 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0">
         <motion.div
@@ -65,19 +83,19 @@ export const Login: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 100 }}
-        className="max-w-md w-full relative z-10"
+        className="max-w-sm sm:max-w-md w-full relative z-10"
       >
-        <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-white/20">
+        <div className="bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-8 border border-white/20">
           <div className="text-center mb-8">
             <motion.h2 
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent"
+              className="text-2xl sm:text-3xl font-bold text-gray-800"
             >
-              Welcome Back
+              Sign In
             </motion.h2>
-            <p className="text-gray-600 mt-2">Sign in to your account</p>
+            <p className="text-gray-600 mt-2">Welcome back to your account</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">

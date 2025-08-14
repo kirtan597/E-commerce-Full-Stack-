@@ -4,7 +4,7 @@ import { ShoppingCart, User, Search, Menu, X, Github, Sparkles } from 'lucide-re
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
-import { signOut } from '../lib/supabase';
+import { mockAuth } from '../utils/mockAuth';
 import toast from 'react-hot-toast';
 
 export const Header: React.FC = () => {
@@ -15,17 +15,18 @@ export const Header: React.FC = () => {
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
-    const { error } = await signOut();
+    const { error } = await mockAuth.signOut();
     if (error) {
       toast.error('Failed to sign out');
     } else {
       toast.success('Signed out successfully');
+      window.location.reload();
       navigate('/');
     }
   };
 
   const handleSearch = (e: React.FormEvent) => {
-    
+    k
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
@@ -38,21 +39,23 @@ export const Header: React.FC = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
-      className="bg-white/95 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-gray-100"
+      className="bg-gradient-to-r from-purple-600/90 via-blue-600/90 to-teal-600/90 backdrop-blur-xl shadow-2xl sticky top-0 z-50 border-b border-white/20"
     >
-      <div className="container mx-auto px-4 py-4">
+      <div className="absolute inset-0 rainbow-bg opacity-80"></div>
+      <div className="absolute inset-0 bg-black/10"></div>
+      <div className="container mx-auto px-4 py-4 relative z-10">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 group">
             <motion.div
-              whileHover={{ rotate: 180 }}
-              transition={{ duration: 0.3 }}
-              className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center"
+              whileHover={{ rotate: 360, scale: 1.1 }}
+              transition={{ duration: 0.5 }}
+              className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30 shadow-lg"
             >
-              <Sparkles className="text-white" size={16} />
+              <Sparkles className="text-white color-shift" size={20} />
             </motion.div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent group-hover:from-purple-600 group-hover:to-pink-600 transition-all duration-300">
-              ShopHub
+            <span className="text-3xl font-black text-white drop-shadow-2xl group-hover:scale-105 transition-all duration-300" style={{ fontFamily: 'Orbitron, monospace', letterSpacing: '2px', textShadow: '0 0 20px rgba(255, 255, 0, 0.8), 0 0 40px rgba(255, 255, 0, 0.4)' }}>
+              🛍️ ShopHub
             </span>
           </Link>
 
@@ -64,13 +67,13 @@ export const Header: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search products..."
-                className="w-full px-4 py-2 border border-gray-200 rounded-l-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50/50 backdrop-blur-sm"
+                className="w-full px-4 py-3 border border-white/30 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-white/50 bg-white/20 backdrop-blur-md text-white placeholder-white/70 shadow-lg"
               />
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 type="submit"
-                className="absolute right-0 top-0 h-full px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-r-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
+                className="absolute right-0 top-0 h-full px-4 bg-white/30 backdrop-blur-sm text-white rounded-r-2xl hover:bg-white/40 transition-all duration-300 border border-white/30 shadow-lg"
               >
                 <Search size={20} />
               </motion.button>
@@ -79,33 +82,33 @@ export const Header: React.FC = () => {
 
           {/* Navigation - Desktop */}
           <nav className="hidden md:flex items-center space-x-6">
-            <motion.div whileHover={{ y: -2 }}>
-              <Link to="/products" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
-              Products
+            <motion.div whileHover={{ y: -3, scale: 1.05 }}>
+              <Link to="/products" className="text-white/90 hover:text-white transition-all duration-300 font-semibold px-4 py-2 rounded-xl hover:bg-white/20 backdrop-blur-sm">
+              🛒 Products
               </Link>
             </motion.div>
             
             <motion.a
-              whileHover={{ y: -2 }}
+              whileHover={{ y: -3, scale: 1.05 }}
               href="https://github.com/kirtan597" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-gray-700 hover:text-blue-600 transition-colors flex items-center gap-2 font-medium"
+              className="text-white/90 hover:text-white transition-all duration-300 flex items-center gap-2 font-semibold px-4 py-2 rounded-xl hover:bg-white/20 backdrop-blur-sm"
             >
-              <Github size={20} />
+              <Github size={20} className="color-shift" />
               <span>GitHub</span>
             </motion.a>
 
             {user ? (
               <>
-                <motion.div whileHover={{ y: -2 }}>
-                  <Link to="/cart" className="relative text-gray-700 hover:text-blue-600 transition-colors">
-                  <ShoppingCart size={24} />
+                <motion.div whileHover={{ y: -3, scale: 1.1 }}>
+                  <Link to="/cart" className="relative text-white/90 hover:text-white transition-all duration-300 p-2 rounded-xl hover:bg-white/20 backdrop-blur-sm">
+                  <ShoppingCart size={24} className="color-shift" />
                   {totalItems > 0 && (
                     <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center shadow-lg"
+                      className="absolute -top-1 -right-1 rainbow-bg text-white text-xs rounded-full h-6 w-6 flex items-center justify-center shadow-lg font-bold pulse-glow"
                     >
                       {totalItems}
                     </motion.span>
@@ -114,41 +117,41 @@ export const Header: React.FC = () => {
                 </motion.div>
                 
                 {isAdmin && (
-                  <motion.div whileHover={{ y: -2 }}>
-                    <Link to="/admin" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
-                    Admin
+                  <motion.div whileHover={{ y: -3, scale: 1.05 }}>
+                    <Link to="/admin" className="text-white/90 hover:text-white transition-all duration-300 font-semibold px-4 py-2 rounded-xl hover:bg-white/20 backdrop-blur-sm">
+                    ⚙️ Admin
                     </Link>
                   </motion.div>
                 )}
                 
                 <div className="relative group">
                   <motion.button 
-                    whileHover={{ y: -2 }}
-                    className="flex items-center text-gray-700 hover:text-blue-600 transition-colors"
+                    whileHover={{ y: -3, scale: 1.1 }}
+                    className="flex items-center text-white/90 hover:text-white transition-all duration-300 p-2 rounded-xl hover:bg-white/20 backdrop-blur-sm"
                   >
-                    <User size={24} />
+                    <User size={24} className="color-shift" />
                   </motion.button>
-                  <div className="absolute right-0 mt-2 w-48 bg-white/95 backdrop-blur-md rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-100">
-                    <Link to="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                      Profile
+                  <div className="absolute right-0 mt-2 w-48 bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border border-white/20">
+                    <Link to="/profile" className="block px-4 py-3 text-white/90 hover:bg-white/20 hover:text-white transition-all duration-300 rounded-xl m-1">
+                      👤 Profile
                     </Link>
-                    <Link to="/orders" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                      Orders
+                    <Link to="/orders" className="block px-4 py-3 text-white/90 hover:bg-white/20 hover:text-white transition-all duration-300 rounded-xl m-1">
+                      📦 Orders
                     </Link>
                     <button
                       onClick={handleSignOut}
-                      className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                      className="block w-full text-left px-4 py-3 text-white/90 hover:bg-white/20 hover:text-white transition-all duration-300 rounded-xl m-1"
                     >
-                      Sign Out
+                      🚪 Sign Out
                     </button>
                   </div>
                 </div>
               </>
             ) : (
               <div className="flex space-x-4">
-                <motion.div whileHover={{ y: -2 }}>
-                  <Link to="/login" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
-                  Sign In
+                <motion.div whileHover={{ y: -3, scale: 1.05 }}>
+                  <Link to="/login" className="text-white/90 hover:text-white transition-all duration-300 font-semibold px-4 py-2 rounded-xl hover:bg-white/20 backdrop-blur-sm">
+                  🔑 Sign In
                   </Link>
                 </motion.div>
                 <motion.div
@@ -157,9 +160,9 @@ export const Header: React.FC = () => {
                 >
                   <Link
                   to="/register"
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium shadow-lg"
+                  className="bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white px-6 py-2 rounded-xl hover:bg-white/30 hover:border-white/50 transition-all duration-300 font-semibold shadow-lg pulse-glow"
                   >
-                  Sign Up
+                  ✨ Sign Up
                   </Link>
                 </motion.div>
               </div>
@@ -169,8 +172,9 @@ export const Header: React.FC = () => {
           {/* Mobile Menu Button */}
           <motion.button
             whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.1 }}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden text-gray-700"
+            className="md:hidden text-white p-2 rounded-xl hover:bg-white/20 backdrop-blur-sm transition-all duration-300"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </motion.button>
@@ -184,7 +188,7 @@ export const Header: React.FC = () => {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden mt-4 pb-4 border-t pt-4"
+              className="md:hidden mt-4 pb-4 border-t border-white/20 pt-4 bg-white/10 backdrop-blur-xl rounded-2xl mx-2"
             >
             {/* Mobile Search */}
             <form onSubmit={handleSearch} className="mb-4">
@@ -194,11 +198,11 @@ export const Header: React.FC = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search products..."
-                  className="w-full px-4 py-2 border border-gray-200 rounded-l-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50/50"
+                  className="w-full px-4 py-3 border border-white/30 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-white/50 bg-white/20 backdrop-blur-md text-white placeholder-white/70"
                 />
                 <button
                   type="submit"
-                  className="absolute right-0 top-0 h-full px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-r-xl hover:from-blue-700 hover:to-purple-700"
+                  className="absolute right-0 top-0 h-full px-4 bg-white/30 backdrop-blur-sm text-white rounded-r-2xl hover:bg-white/40 transition-all duration-300"
                 >
                   <Search size={20} />
                 </button>
@@ -207,15 +211,15 @@ export const Header: React.FC = () => {
 
             {/* Mobile Navigation */}
             <nav className="flex flex-col space-y-4">
-              <Link to="/products" className="text-gray-700 hover:text-blue-600">
-                Products
+              <Link to="/products" className="text-white/90 hover:text-white transition-all duration-300 py-2 px-4 rounded-xl hover:bg-white/20 block">
+                🛒 Products
               </Link>
               
               <a 
                 href="https://github.com/yourusername/shophub-ecommerce" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-gray-700 hover:text-blue-600 flex items-center gap-2"
+                className="text-white/90 hover:text-white transition-all duration-300 flex items-center gap-2 py-2 px-4 rounded-xl hover:bg-white/20"
               >
                 <Github size={20} />
                 <span>GitHub</span>
@@ -223,40 +227,40 @@ export const Header: React.FC = () => {
 
               {user ? (
                 <>
-                  <Link to="/cart" className="text-gray-700 hover:text-blue-600 flex items-center">
+                  <Link to="/cart" className="text-white/90 hover:text-white transition-all duration-300 flex items-center py-2 px-4 rounded-xl hover:bg-white/20">
                     <ShoppingCart size={20} className="mr-2" />
-                    Cart {totalItems > 0 && `(${totalItems})`}
+                    🛒 Cart {totalItems > 0 && `(${totalItems})`}
                   </Link>
                   
                   {isAdmin && (
-                    <Link to="/admin" className="text-gray-700 hover:text-blue-600">
-                      Admin Dashboard
+                    <Link to="/admin" className="text-white/90 hover:text-white transition-all duration-300 py-2 px-4 rounded-xl hover:bg-white/20 block">
+                      ⚙️ Admin Dashboard
                     </Link>
                   )}
                   
-                  <Link to="/profile" className="text-gray-700 hover:text-blue-600">
-                    Profile
+                  <Link to="/profile" className="text-white/90 hover:text-white transition-all duration-300 py-2 px-4 rounded-xl hover:bg-white/20 block">
+                    👤 Profile
                   </Link>
-                  <Link to="/orders" className="text-gray-700 hover:text-blue-600">
-                    Orders
+                  <Link to="/orders" className="text-white/90 hover:text-white transition-all duration-300 py-2 px-4 rounded-xl hover:bg-white/20 block">
+                    📦 Orders
                   </Link>
                   <button
                     onClick={handleSignOut}
-                    className="text-left text-gray-700 hover:text-blue-600"
+                    className="text-left text-white/90 hover:text-white transition-all duration-300 py-2 px-4 rounded-xl hover:bg-white/20 w-full"
                   >
-                    Sign Out
+                    🚪 Sign Out
                   </button>
                 </>
               ) : (
                 <div className="flex flex-col space-y-4">
-                  <Link to="/login" className="text-gray-700 hover:text-blue-600">
-                    Sign In
+                  <Link to="/login" className="text-white/90 hover:text-white transition-all duration-300 py-2 px-4 rounded-xl hover:bg-white/20 block">
+                    🔑 Sign In
                   </Link>
                   <Link
                     to="/register"
-                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-xl hover:from-blue-700 hover:to-purple-700 text-center"
+                    className="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-4 py-2 rounded-xl hover:bg-white/30 text-center transition-all duration-300 block mt-2"
                   >
-                    Sign Up
+                    ✨ Sign Up
                   </Link>
                 </div>
               )}
