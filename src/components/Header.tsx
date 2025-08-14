@@ -55,7 +55,7 @@ export const Header: React.FC = () => {
               <Sparkles className="text-white color-shift" size={20} />
             </motion.div>
             <span className="text-3xl font-black text-white drop-shadow-2xl group-hover:scale-105 transition-all duration-300" style={{ fontFamily: 'Orbitron, monospace', letterSpacing: '2px', textShadow: '0 0 20px rgba(255, 255, 0, 0.8), 0 0 40px rgba(255, 255, 0, 0.4)' }}>
-              🛍️ ShopHub
+              🛍️ KPcart
             </span>
           </Link>
 

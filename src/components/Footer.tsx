@@ -44,7 +44,7 @@ export const Footer: React.FC = () => {
               transition={{ duration: 0.6 }}
               className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4"
             >
-              ShopHub
+              KPcart
             </motion.h3>
             <p className="text-gray-400 mb-4">
               Your premium destination for cutting-edge products with personalized shopping experiences and exceptional service.
@@ -196,7 +196,7 @@ export const Footer: React.FC = () => {
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center relative z-10">
           <p className="text-gray-400">
-            © 2025 ShopHub. Crafted with passion for premium shopping experiences. |{' '}
+            © 2025 KPcart. Crafted with passion for premium shopping experiences. |{' '}
             <Link to="/privacy" className="hover:text-white transition-colors">
               Privacy Policy
             </Link>{' '}
