@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
+import { WishlistProvider } from './contexts/WishlistContext';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
@@ -15,6 +16,7 @@ import { Register } from './pages/Register';
 import { Profile } from './pages/Profile';
 import { Orders } from './pages/Orders';
 import { Admin } from './pages/Admin';
+import { Wishlist } from './pages/Wishlist';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { AdminRoute } from './components/AdminRoute';
 import { CustomCursor } from './components/CustomCursor';
@@ -101,6 +103,17 @@ const AnimatedRoutes = () => {
             <Register />
           </motion.div>
         } />
+        <Route path="/wishlist" element={
+          <motion.div
+            initial="initial"
+            animate="in"
+            exit="out"
+            variants={pageVariants}
+            transition={pageTransition}
+          >
+            <Wishlist />
+          </motion.div>
+        } />
         <Route path="/cart" element={
           <ProtectedRoute>
             <motion.div
@@ -163,6 +176,7 @@ function App() {
   return (
     <AuthProvider>
       <CartProvider>
+        <WishlistProvider>
         <Router>
           <motion.div 
             className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-teal-50 flex flex-col relative overflow-hidden"
@@ -196,6 +210,7 @@ function App() {
             }}
           />
         </Router>
+        </WishlistProvider>
       </CartProvider>
     </AuthProvider>
   );
