@@ -143,11 +143,52 @@ export const Products: React.FC = () => {
           </div>
         </motion.div>
 
+        {/* Search Results Info */}
+        {searchQuery && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 p-4 bg-blue-50 rounded-2xl border border-blue-200"
+          >
+            <h2 className="text-lg font-semibold text-blue-800 mb-2">
+              Search Results for "{searchQuery}"
+            </h2>
+            <p className="text-blue-600">
+              {filteredAndSortedProducts.length} {filteredAndSortedProducts.length === 1 ? 'product' : 'products'} found
+            </p>
+          </motion.div>
+        )}
+
         {/* Products Grid */}
         {filteredAndSortedProducts.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No products found matching your criteria.</p>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-16"
+          >
+            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-12 max-w-md mx-auto border border-white/20">
+              <div className="text-6xl mb-6">🔍</div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                {searchQuery ? 'No products found' : 'No products available'}
+              </h2>
+              <p className="text-gray-600 mb-8">
+                {searchQuery 
+                  ? `No products match "${searchQuery}". Try different keywords or browse categories.`
+                  : 'No products match your current filters.'}
+              </p>
+              {searchQuery && (
+                <button
+                  onClick={() => {
+                    window.history.replaceState({}, '', '/products');
+                    window.location.reload();
+                  }}
+                  className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-xl hover:from-blue-600 hover:to-purple-600 transition-all duration-300 font-semibold shadow-lg hover:scale-105"
+                >
+                  Browse All Products
+                </button>
+              )}
+            </div>
+          </motion.div>
         ) : (
           <motion.div
             layout

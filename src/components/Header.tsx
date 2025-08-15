@@ -1,20 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, User, Search, Menu, X, Github, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
 import { useWishlist } from '../contexts/WishlistContext';
+import { SearchSuggestions } from './SearchSuggestions';
+import { generateProducts } from '../utils/productGenerator';
+import { Product } from '../types';
 import { mockAuth } from '../utils/mockAuth';
 import toast from 'react-hot-toast';
 
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchSuggestions, setSearchSuggestions] = useState<Product[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const { user, isAdmin } = useAuth();
   const { totalItems } = useCart();
   const { totalWishlistItems } = useWishlist();
   const navigate = useNavigate();
+  const allProducts = generateProducts(100);
 
   const handleSignOut = async () => {
     const { error } = await mockAuth.signOut();
@@ -27,13 +33,39 @@ export const Header: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (searchQuery.trim().length > 0) {
+      const filtered = allProducts.filter(product =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.category.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setSearchSuggestions(filtered);
+      setShowSuggestions(true);
+    } else {
+      setSearchSuggestions([]);
+      setShowSuggestions(false);
+    }
+  }, [searchQuery]);
+
   const handleSearch = (e: React.FormEvent) => {
-    k
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery('');
+      setShowSuggestions(false);
     }
+  };
+
+  const handleSuggestionClick = (product: Product) => {
+    navigate(`/product/${product.id}`);
+    setSearchQuery('');
+    setShowSuggestions(false);
+  };
+
+  const handleViewAllResults = () => {
+    navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+    setSearchQuery('');
+    setShowSuggestions(false);
   };
 
   return (
@@ -68,6 +100,8 @@ export const Header: React.FC = () => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => searchQuery.trim().length > 1 && setShowSuggestions(true)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                 placeholder="Search products..."
                 className="w-full px-4 py-3 border border-white/30 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-white/50 bg-white/20 backdrop-blur-md text-white placeholder-white/70 shadow-lg"
               />
@@ -79,6 +113,44 @@ export const Header: React.FC = () => {
               >
                 <Search size={20} />
               </motion.button>
+              
+              {showSuggestions && searchQuery.trim() && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-md rounded-xl shadow-2xl z-50 max-h-96 overflow-y-auto border border-white/20">
+                  {searchSuggestions.length > 0 ? (
+                    <>
+                      <div className="p-3 border-b border-gray-200 bg-green-50">
+                        <span className="text-green-700 font-medium">✅ {searchSuggestions.length} products available</span>
+                      </div>
+                      {searchSuggestions.slice(0, 6).map((product) => (
+                        <div
+                          key={product.id}
+                          onClick={() => handleSuggestionClick(product)}
+                          className="flex items-center p-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors"
+                        >
+                          <img src={product.image_url} alt={product.name} className="w-12 h-12 object-cover rounded-lg mr-3 shadow-sm" />
+                          <div className="flex-1">
+                            <div className="font-semibold text-gray-800 truncate">{product.name}</div>
+                            <div className="text-sm text-gray-500">{product.category}</div>
+                            <div className="text-sm font-bold text-blue-600">₹{product.price.toLocaleString('en-IN')}</div>
+                          </div>
+                          <div className="text-green-500 text-xs bg-green-100 px-2 py-1 rounded-full">Available</div>
+                        </div>
+                      ))}
+                      {searchSuggestions.length > 6 && (
+                        <div onClick={handleViewAllResults} className="p-3 text-center text-blue-600 cursor-pointer hover:bg-blue-50 font-medium border-t">
+                          View all {searchSuggestions.length} products →
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="p-6 text-center bg-red-50">
+                      <div className="text-red-500 text-2xl mb-2">❌</div>
+                      <div className="text-red-700 font-medium">No products found</div>
+                      <div className="text-red-600 text-sm mt-1">Try different keywords</div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </form>
 
@@ -214,6 +286,8 @@ export const Header: React.FC = () => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => searchQuery.trim().length > 1 && setShowSuggestions(true)}
+                  onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                   placeholder="Search products..."
                   className="w-full px-4 py-3 border border-white/30 rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-white/50 bg-white/20 backdrop-blur-md text-white placeholder-white/70"
                 />
@@ -223,6 +297,44 @@ export const Header: React.FC = () => {
                 >
                   <Search size={20} />
                 </button>
+                
+                {showSuggestions && searchQuery.trim() && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-md rounded-xl shadow-2xl z-50 max-h-96 overflow-y-auto border border-white/20">
+                    {searchSuggestions.length > 0 ? (
+                      <>
+                        <div className="p-3 border-b border-gray-200 bg-green-50">
+                          <span className="text-green-700 font-medium">✅ {searchSuggestions.length} products available</span>
+                        </div>
+                        {searchSuggestions.slice(0, 6).map((product) => (
+                          <div
+                            key={product.id}
+                            onClick={() => handleSuggestionClick(product)}
+                            className="flex items-center p-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors"
+                          >
+                            <img src={product.image_url} alt={product.name} className="w-12 h-12 object-cover rounded-lg mr-3 shadow-sm" />
+                            <div className="flex-1">
+                              <div className="font-semibold text-gray-800 truncate">{product.name}</div>
+                              <div className="text-sm text-gray-500">{product.category}</div>
+                              <div className="text-sm font-bold text-blue-600">₹{product.price.toLocaleString('en-IN')}</div>
+                            </div>
+                            <div className="text-green-500 text-xs bg-green-100 px-2 py-1 rounded-full">Available</div>
+                          </div>
+                        ))}
+                        {searchSuggestions.length > 6 && (
+                          <div onClick={handleViewAllResults} className="p-3 text-center text-blue-600 cursor-pointer hover:bg-blue-50 font-medium border-t">
+                            View all {searchSuggestions.length} products →
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <div className="p-6 text-center bg-red-50">
+                        <div className="text-red-500 text-2xl mb-2">❌</div>
+                        <div className="text-red-700 font-medium">No products found</div>
+                        <div className="text-red-600 text-sm mt-1">Try different keywords</div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </form>
 
