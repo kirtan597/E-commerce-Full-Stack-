@@ -27,7 +27,6 @@ export const Login: React.FC = () => {
         toast.error(error.message);
       } else {
         toast.success('Signed in successfully!');
-        window.location.reload();
         
         if (productId) {
           // Add the product to cart after login
@@ -41,6 +40,7 @@ export const Login: React.FC = () => {
         }
         
         navigate('/');
+        window.location.reload();
       }
     } catch (error) {
       toast.error('An error occurred during sign in');
