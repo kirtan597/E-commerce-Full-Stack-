@@ -20,16 +20,27 @@ export const Products: React.FC = () => {
   const searchQuery = searchParams.get('search') || '';
 
   useEffect(() => {
-    fetchProducts();
+    // Always ensure products are loaded
+    if (products.length === 0) {
+      fetchProducts();
+    }
+  }, [products.length]);
+
+  // Initialize products immediately
+  useEffect(() => {
+    const generatedProducts = generateProducts(80);
+    setProducts(generatedProducts);
   }, []);
 
-  const fetchProducts = async () => {
+  const fetchProducts = () => {
     setLoading(true);
     try {
       const generatedProducts = generateProducts(80);
       setProducts(generatedProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
+      // Fallback to ensure products are always available
+      setProducts(generateProducts(80));
     } finally {
       setLoading(false);
     }
