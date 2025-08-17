@@ -11,40 +11,12 @@ const categories = ['All', 'Electronics', 'Clothing', 'Books', 'Home', 'Sports',
 
 export const Products: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('name');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const searchQuery = searchParams.get('search') || '';
-
-  useEffect(() => {
-    // Always ensure products are loaded
-    if (products.length === 0) {
-      fetchProducts();
-    }
-  }, [products.length]);
-
-  // Initialize products immediately
-  useEffect(() => {
-    const generatedProducts = generateProducts(80);
-    setProducts(generatedProducts);
-  }, []);
-
-  const fetchProducts = () => {
-    setLoading(true);
-    try {
-      const generatedProducts = generateProducts(80);
-      setProducts(generatedProducts);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-      // Fallback to ensure products are always available
-      setProducts(generateProducts(80));
-    } finally {
-      setLoading(false);
-    }
-  };
+  const products = generateProducts(80); // Always generate products directly
 
   const filteredAndSortedProducts = products
     .filter(product => {
@@ -66,14 +38,6 @@ export const Products: React.FC = () => {
           return 0;
       }
     });
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 py-8">
