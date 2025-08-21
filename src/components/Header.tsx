@@ -28,8 +28,10 @@ export const Header: React.FC = () => {
       toast.error('Failed to sign out');
     } else {
       toast.success('Signed out successfully');
-      window.location.reload();
       navigate('/');
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 100);
     }
   };
 
