@@ -1,4 +1,4 @@
-import { Product } from '../types';
+
 
 const productTemplates = {
   Electronics: [
@@ -103,9 +103,9 @@ const images = {
   ]
 };
 
-export const generateProducts = (count: number = 50): Product[] => {
-  const products: Product[] = [];
-  const categories = Object.keys(productTemplates) as (keyof typeof productTemplates)[];
+export const generateProducts = (count = 50) => {
+  const products = [];
+  const categories = Object.keys(productTemplates);
   
   for (let i = 0; i < count; i++) {
     const category = categories[i % categories.length];
@@ -115,7 +115,7 @@ export const generateProducts = (count: number = 50): Product[] => {
     
     const basePrice = Math.floor(Math.random() * 50000) + 1000;
     const hasDiscount = Math.random() > 0.6;
-    const discountPercentage = hasDiscount ? Math.floor(Math.random() * 30) + 5 : undefined;
+  const discountPercentage = hasDiscount ? Math.floor(Math.random() * 30) + 5 : undefined;
     
     products.push({
       id: `generated-${i + 1}`,
@@ -134,21 +134,21 @@ export const generateProducts = (count: number = 50): Product[] => {
   return products;
 };
 
-export const getFeaturedProducts = (allProducts: Product[], count: number = 8): Product[] => {
+export const getFeaturedProducts = (allProducts, count = 8) => {
   return allProducts
     .filter(p => p.discount_percentage && p.discount_percentage > 15)
     .sort(() => Math.random() - 0.5)
     .slice(0, count);
 };
 
-export const getTrendingProducts = (allProducts: Product[], count: number = 6): Product[] => {
+export const getTrendingProducts = (allProducts, count = 6) => {
   return allProducts
     .filter(p => p.stock_quantity < 20)
     .sort(() => Math.random() - 0.5)
     .slice(0, count);
 };
 
-export const getNewArrivals = (allProducts: Product[], count: number = 8): Product[] => {
+export const getNewArrivals = (allProducts, count = 8) => {
   return allProducts
     .sort(() => Math.random() - 0.5)
     .slice(0, count);

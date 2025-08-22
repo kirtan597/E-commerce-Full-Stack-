@@ -4,7 +4,7 @@ import { Trash2, Plus, Minus, ShoppingBag } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { Link } from 'react-router-dom';
 
-export const Cart: React.FC = () => {
+export const Cart = () => {
   const { items, updateQuantity, removeFromCart, totalPrice, totalDiscount, loading } = useCart();
 
   const finalTotal = totalPrice - totalDiscount;

@@ -7,7 +7,7 @@ import { useCart } from '../contexts/CartContext';
 import { generateProducts } from '../utils/productGenerator';
 import toast from 'react-hot-toast';
 
-export const Login: React.FC = () => {
+export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -17,7 +17,7 @@ export const Login: React.FC = () => {
   const { addToCart } = useCart();
   const productId = searchParams.get('productId');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 

@@ -1,23 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { CartItem, Product } from '../types';
+
 import { mockAuth } from '../utils/mockAuth';
 import { useAuth } from './AuthContext';
 import toast from 'react-hot-toast';
 import { generateProducts } from '../utils/productGenerator';
 
-interface CartContextType {
-  items: CartItem[];
-  addToCart: (product: Product, quantity?: number) => Promise<void>;
-  removeFromCart: (itemId: string) => Promise<void>;
-  updateQuantity: (itemId: string, quantity: number) => Promise<void>;
-  clearCart: () => Promise<void>;
-  totalItems: number;
-  totalPrice: number;
-  totalDiscount: number;
-  loading: boolean;
-}
 
-const CartContext = createContext<CartContextType>({
+const CartContext = createContext({
   items: [],
   addToCart: async () => {},
   removeFromCart: async () => {},
@@ -37,8 +26,8 @@ export const useCart = () => {
   return context;
 };
 
-export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [items, setItems] = useState<CartItem[]>([]);
+export const CartProvider = ({ children }) => {
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
 
@@ -66,14 +55,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         products: allProducts.find(p => p.id === item.product_id)
       }));
       
-      setItems(itemsWithProducts as CartItem[]);
+  setItems(itemsWithProducts);
     } catch (error) {
       console.error('Error fetching cart items:', error);
       toast.error('Failed to load cart');
     }
   };
 
-  const addToCart = async (product: Product, quantity = 1) => {
+  const addToCart = async (product, quantity = 1) => {
     if (!user) {
       toast.error('Please sign in to add items to cart');
       return;
@@ -92,7 +81,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const removeFromCart = async (itemId: string) => {
+  const removeFromCart = async (itemId) => {
     setLoading(true);
     try {
       await mockAuth.removeCartItem(itemId);
@@ -106,7 +95,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const updateQuantity = async (itemId: string, quantity: number) => {
+  const updateQuantity = async (itemId, quantity) => {
     if (quantity <= 0) {
       await removeFromCart(itemId);
       return;

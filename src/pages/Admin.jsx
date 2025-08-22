@@ -131,7 +131,7 @@ const AdminOrders = () => {
   );
 };
 
-export const Admin: React.FC = () => {
+export const Admin = () => {
   const location = useLocation();
   
   const navItems = [

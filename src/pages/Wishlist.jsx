@@ -6,7 +6,7 @@ import { useWishlist } from '../contexts/WishlistContext';
 import { useCart } from '../contexts/CartContext';
 import { ProductCard } from '../components/ProductCard';
 
-export const Wishlist: React.FC = () => {
+export const Wishlist = () => {
   const { wishlistItems, totalWishlistItems } = useWishlist();
   const { addToCart } = useCart();
 

@@ -1,22 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { mockAuth } from '../utils/mockAuth';
 
-interface MockUser {
-  id: string;
-  email: string;
-  user_metadata: {
-    full_name: string;
-  };
-  created_at: string;
-}
-
-interface AuthContextType {
-  user: MockUser | null;
-  loading: boolean;
-  isAdmin: boolean;
-}
-
-const AuthContext = createContext<AuthContextType>({
+const AuthContext = createContext({
   user: null,
   loading: true,
   isAdmin: false,
@@ -30,8 +15,8 @@ export const useAuth = () => {
   return context;
 };
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<MockUser | null>(null);
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
 

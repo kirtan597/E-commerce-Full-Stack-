@@ -1,17 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Product } from '../types';
+
 import { useAuth } from './AuthContext';
 import toast from 'react-hot-toast';
 
-interface WishlistContextType {
-  wishlistItems: Product[];
-  addToWishlist: (product: Product) => void;
-  removeFromWishlist: (productId: string) => void;
-  isInWishlist: (productId: string) => boolean;
-  totalWishlistItems: number;
-}
-
-const WishlistContext = createContext<WishlistContextType>({
+const WishlistContext = createContext({
   wishlistItems: [],
   addToWishlist: () => {},
   removeFromWishlist: () => {},
@@ -27,8 +19,8 @@ export const useWishlist = () => {
   return context;
 };
 
-export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [wishlistItems, setWishlistItems] = useState<Product[]>([]);
+export const WishlistProvider = ({ children }) => {
+  const [wishlistItems, setWishlistItems] = useState([]);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -42,13 +34,13 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   }, [user]);
 
-  const saveWishlist = (items: Product[]) => {
+  const saveWishlist = (items) => {
     if (user) {
       localStorage.setItem(`wishlist_${user.id}`, JSON.stringify(items));
     }
   };
 
-  const addToWishlist = (product: Product) => {
+  const addToWishlist = (product) => {
     if (!user) {
       toast.error('Please sign in to add to wishlist');
       return;
@@ -62,14 +54,14 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   };
 
-  const removeFromWishlist = (productId: string) => {
+  const removeFromWishlist = (productId) => {
     const newWishlist = wishlistItems.filter(item => item.id !== productId);
     setWishlistItems(newWishlist);
     saveWishlist(newWishlist);
     toast.success('Removed from wishlist');
   };
 
-  const isInWishlist = (productId: string) => {
+  const isInWishlist = (productId) => {
     return wishlistItems.some(item => item.id === productId);
   };
 

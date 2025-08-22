@@ -33,7 +33,7 @@ const mockProduct = {
   ],
 };
 
-export const ProductDetail: React.FC = () => {
+export const ProductDetail = () => {
   const { id } = useParams();
   const { addToCart, loading } = useCart();
   const [selectedImage, setSelectedImage] = useState(0);

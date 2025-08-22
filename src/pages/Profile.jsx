@@ -4,7 +4,7 @@ import { User, Mail, Calendar, Edit, Save, X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
 
-export const Profile: React.FC = () => {
+export const Profile = () => {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [fullName, setFullName] = useState(user?.user_metadata?.full_name || '');

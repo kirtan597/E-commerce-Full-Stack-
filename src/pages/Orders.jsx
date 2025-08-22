@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Package, Calendar, CreditCard, Truck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-export const Orders: React.FC = () => {
+export const Orders = () => {
   // Mock orders data for demo
   const orders = [];
 

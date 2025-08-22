@@ -1,17 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Search, ShoppingBag } from 'lucide-react';
-import { Product } from '../types';
 
-interface SearchSuggestionsProps {
-  suggestions: Product[];
-  searchQuery: string;
-  onSuggestionClick: (product: Product) => void;
-  onViewAll: () => void;
-  isVisible: boolean;
-}
 
-export const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
+
+export const SearchSuggestions = ({
   suggestions,
   searchQuery,
   onSuggestionClick,

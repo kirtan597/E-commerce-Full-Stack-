@@ -3,13 +3,13 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Filter, Grid, List, ArrowLeft } from 'lucide-react';
 import { ProductCard } from '../components/ProductCard';
-import { Product } from '../types';
-import { supabase } from '../lib/supabase';
+
+
 import { generateProducts } from '../utils/productGenerator';
 
 const categories = ['All', 'Electronics', 'Clothing', 'Books', 'Home', 'Sports', 'Photography'];
 
-export const Products: React.FC = () => {
+export const Products = () => {
   const [searchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('name');

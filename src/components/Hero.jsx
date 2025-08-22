@@ -35,7 +35,7 @@ const floatingAnimation = {
     ease: "easeInOut"
   }
 };
-export const Hero: React.FC = () => {
+export const Hero = () => {
   const features = [
     { icon: ShoppingBag, title: 'Quality Products', desc: 'Curated selection of premium items' },
     { icon: Truck, title: 'Free Shipping', desc: 'Free delivery on orders over $50' },

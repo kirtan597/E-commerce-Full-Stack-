@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from 'lucide-react';
 
-export const Footer: React.FC = () => {
+export const Footer = () => { 
   return (
     <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white relative overflow-hidden">
       {/* Animated background elements */}

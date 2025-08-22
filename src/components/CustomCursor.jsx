@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-export const CustomCursor: React.FC = () => {
+export const CustomCursor = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
-    const updatePosition = (e: MouseEvent) => {
+  const updatePosition = (e) => {
       setPosition({ x: e.clientX, y: e.clientY });
     };
 

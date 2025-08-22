@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Hero } from '../components/Hero';
 import { ProductCard } from '../components/ProductCard';
-import { Product } from '../types';
+
 import { generateProducts, getFeaturedProducts, getTrendingProducts, getNewArrivals } from '../utils/productGenerator';
 
-export const Home: React.FC = () => {
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
-  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
-  const [trendingProducts, setTrendingProducts] = useState<Product[]>([]);
-  const [newArrivals, setNewArrivals] = useState<Product[]>([]);
+export const Home = () => {
+  const [allProducts, setAllProducts] = useState([]);
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [trendingProducts, setTrendingProducts] = useState([]);
+  const [newArrivals, setNewArrivals] = useState([]);
 
   useEffect(() => {
     const products = generateProducts(60);

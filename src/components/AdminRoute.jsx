@@ -2,11 +2,7 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
-interface AdminRouteProps {
-  children: React.ReactNode;
-}
-
-export const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
+export const AdminRoute = ({ children }) => {
   const { user, loading, isAdmin } = useAuth();
 
   if (loading) {

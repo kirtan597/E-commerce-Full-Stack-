@@ -7,14 +7,14 @@ import { useCart } from '../contexts/CartContext';
 import { useWishlist } from '../contexts/WishlistContext';
 import { SearchSuggestions } from './SearchSuggestions';
 import { generateProducts } from '../utils/productGenerator';
-import { Product } from '../types';
+
 import { mockAuth } from '../utils/mockAuth';
 import toast from 'react-hot-toast';
 
-export const Header: React.FC = () => {
+export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchSuggestions, setSearchSuggestions] = useState<Product[]>([]);
+  const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const { user, isAdmin } = useAuth();
   const { totalItems } = useCart();
@@ -49,7 +49,7 @@ export const Header: React.FC = () => {
     }
   }, [searchQuery]);
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
@@ -58,7 +58,7 @@ export const Header: React.FC = () => {
     }
   };
 
-  const handleSuggestionClick = (product: Product) => {
+  const handleSuggestionClick = (product) => {
     navigate(`/product/${product.id}`);
     setSearchQuery('');
     setShowSuggestions(false);

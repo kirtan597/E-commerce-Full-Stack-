@@ -1,17 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingCart, Heart } from 'lucide-react';
-import { Product } from '../types';
+
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useWishlist } from '../contexts/WishlistContext';
 import { useNavigate } from 'react-router-dom';
 
-interface ProductCardProps {
-  product: Product;
-}
-
-export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+export const ProductCard = ({ product }) => {
   const { addToCart, loading } = useCart();
   const { user } = useAuth();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
@@ -51,7 +47,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     Photography: 'from-purple-500 to-pink-600'
   };
 
-  const gradientClass = categoryColors[product.category as keyof typeof categoryColors] || 'from-gray-500 to-gray-600';
+  const gradientClass = categoryColors[product.category] || 'from-gray-500 to-gray-600';
 
   return (
     <motion.div

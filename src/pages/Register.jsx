@@ -5,7 +5,7 @@ import { Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
 import { mockAuth } from '../utils/mockAuth';
 import toast from 'react-hot-toast';
 
-export const Register: React.FC = () => {
+export const Register = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,7 +15,7 @@ export const Register: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (password !== confirmPassword) {

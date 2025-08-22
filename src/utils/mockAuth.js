@@ -1,48 +1,31 @@
-interface MockUser {
-  id: string;
-  email: string;
-  user_metadata: {
-    full_name: string;
-  };
-  created_at: string;
-}
-
-interface MockCartItem {
-  id: string;
-  user_id: string;
-  product_id: string;
-  quantity: number;
-}
-
 class MockAuthService {
-  private users: MockUser[] = [];
-  private cartItems: MockCartItem[] = [];
-  private currentUser: MockUser | null = null;
-
   constructor() {
+    this.users = [];
+    this.cartItems = [];
+    this.currentUser = null;
+
     // Load from localStorage
     const savedUsers = localStorage.getItem('mockUsers');
     const savedCart = localStorage.getItem('mockCart');
     const savedCurrentUser = localStorage.getItem('mockCurrentUser');
-    
     if (savedUsers) this.users = JSON.parse(savedUsers);
     if (savedCart) this.cartItems = JSON.parse(savedCart);
     if (savedCurrentUser) this.currentUser = JSON.parse(savedCurrentUser);
   }
 
-  private saveToStorage() {
+  saveToStorage() {
     localStorage.setItem('mockUsers', JSON.stringify(this.users));
     localStorage.setItem('mockCart', JSON.stringify(this.cartItems));
     localStorage.setItem('mockCurrentUser', JSON.stringify(this.currentUser));
   }
 
-  async signUp(email: string, password: string, fullName: string) {
+  async signUp(email, password, fullName) {
     const existingUser = this.users.find(u => u.email === email);
     if (existingUser) {
       return { error: { message: 'User already exists' } };
     }
 
-    const newUser: MockUser = {
+  const newUser = {
       id: Date.now().toString(),
       email,
       user_metadata: { full_name: fullName },
@@ -56,7 +39,7 @@ class MockAuthService {
     return { data: { user: newUser }, error: null };
   }
 
-  async signIn(email: string, password: string) {
+  async signIn(email, password) {
     const user = this.users.find(u => u.email === email);
     if (!user) {
       return { error: { message: 'Invalid credentials' } };
@@ -79,7 +62,7 @@ class MockAuthService {
   }
 
   // Cart methods
-  async addToCart(userId: string, productId: string, quantity: number) {
+  async addToCart(userId, productId, quantity) {
     const existingItem = this.cartItems.find(item => 
       item.user_id === userId && item.product_id === productId
     );
@@ -99,11 +82,11 @@ class MockAuthService {
     return { error: null };
   }
 
-  async getCartItems(userId: string) {
+  async getCartItems(userId) {
     return this.cartItems.filter(item => item.user_id === userId);
   }
 
-  async updateCartItem(itemId: string, quantity: number) {
+  async updateCartItem(itemId, quantity) {
     const item = this.cartItems.find(i => i.id === itemId);
     if (item) {
       item.quantity = quantity;
@@ -112,13 +95,13 @@ class MockAuthService {
     return { error: null };
   }
 
-  async removeCartItem(itemId: string) {
+  async removeCartItem(itemId) {
     this.cartItems = this.cartItems.filter(item => item.id !== itemId);
     this.saveToStorage();
     return { error: null };
   }
 
-  async clearCart(userId: string) {
+  async clearCart(userId) {
     this.cartItems = this.cartItems.filter(item => item.user_id !== userId);
     this.saveToStorage();
     return { error: null };

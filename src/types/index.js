@@ -1,33 +1,4 @@
-// Product type definition (converted from TypeScript)
-// export interface Product {
-//   id: string;
-//   name: string;
-//   description: string;
-//   price: number;
-//   image_url: string;
-//   category: string;
-//   stock_quantity: number;
-//   discount_percentage?: number;
-//   created_at: string;
-//   updated_at: string;
-// }
-
-// CartItem type definition (converted from TypeScript)
-// export interface CartItem {
-//   id: string;
-//   user_id: string;
-//   product_id: string;
-//   quantity: number;
-//   product?: Product;
-// }
-
-// Order type definition (converted from TypeScript)
-// export interface Order {
-//   id: string;
-//   user_id: string;
-//   total_amount: number;
-//   discount_amount: number;
-//   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+// This file is intentionally left blank. All types have been removed for JavaScript conversion.
 //   created_at: string;
 //   items: OrderItem[];
 // }
