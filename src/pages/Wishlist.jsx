@@ -97,7 +97,7 @@ export const Wishlist = () => {
           transition={{ delay: 0.2 }}
           className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         >
-          {wishlistItems.map((product) => (
+          {Array.isArray(wishlistItems) && wishlistItems.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </motion.div>

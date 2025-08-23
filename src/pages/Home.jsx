@@ -61,11 +61,15 @@ export const Home = () => {
             variants={sectionVariants}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
           >
-            {featuredProducts.map((product) => (
-              <motion.div key={product.id} variants={itemVariants}>
-                <ProductCard product={product} />
-              </motion.div>
-            ))}
+            {Array.isArray(featuredProducts) && featuredProducts.length > 0 ? (
+              featuredProducts.map((product) => (
+                <motion.div key={product.id} variants={itemVariants}>
+                  <ProductCard product={product} />
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-full text-center text-gray-500 py-8">No featured products available.</div>
+            )}
           </motion.div>
         </div>
       </motion.section>
@@ -91,11 +95,15 @@ export const Home = () => {
             variants={sectionVariants}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            {trendingProducts.map((product) => (
-              <motion.div key={product.id} variants={itemVariants}>
-                <ProductCard product={product} />
-              </motion.div>
-            ))}
+            {Array.isArray(trendingProducts) && trendingProducts.length > 0 ? (
+              trendingProducts.map((product) => (
+                <motion.div key={product.id} variants={itemVariants}>
+                  <ProductCard product={product} />
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-full text-center text-gray-500 py-8">No trending products available.</div>
+            )}
           </motion.div>
         </div>
       </motion.section>
@@ -121,11 +129,15 @@ export const Home = () => {
             variants={sectionVariants}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
           >
-            {newArrivals.map((product) => (
-              <motion.div key={product.id} variants={itemVariants}>
-                <ProductCard product={product} />
-              </motion.div>
-            ))}
+            {Array.isArray(newArrivals) && newArrivals.length > 0 ? (
+              newArrivals.map((product) => (
+                <motion.div key={product.id} variants={itemVariants}>
+                  <ProductCard product={product} />
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-full text-center text-gray-500 py-8">No new arrivals at this time.</div>
+            )}
           </motion.div>
         </div>
       </motion.section>

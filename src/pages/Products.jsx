@@ -18,7 +18,9 @@ export const Products = () => {
   const searchQuery = searchParams.get('search') || '';
   const products = generateProducts(80); // Always generate products directly
 
-  const filteredAndSortedProducts = products
+  // Defensive: ensure products is always an array
+  const safeProducts = Array.isArray(products) ? products : [];
+  const filteredAndSortedProducts = safeProducts
     .filter(product => {
       const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
       const matchesSearch = !searchQuery || 
@@ -71,7 +73,7 @@ export const Products = () => {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             {/* Categories */}
             <div className="flex flex-wrap gap-2">
-              {categories.map(category => (
+              {Array.isArray(categories) && categories.map(category => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
@@ -173,7 +175,7 @@ export const Products = () => {
                 : 'grid-cols-1'
             }`}
           >
-            {filteredAndSortedProducts.map((product) => (
+            {Array.isArray(filteredAndSortedProducts) && filteredAndSortedProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </motion.div>

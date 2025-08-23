@@ -45,17 +45,17 @@ export const CartProvider = ({ children }) => {
     try {
       const cartItems = await mockAuth.getCartItems(user.id);
       const allProducts = generateProducts(100);
-      
-      const itemsWithProducts = cartItems.map(item => ({
-        id: item.id,
-        user_id: item.user_id,
-        product_id: item.product_id,
-        quantity: item.quantity,
-        product: allProducts.find(p => p.id === item.product_id),
-        products: allProducts.find(p => p.id === item.product_id)
-      }));
-      
-  setItems(itemsWithProducts);
+      const itemsWithProducts = Array.isArray(cartItems)
+        ? cartItems.map(item => ({
+            id: item.id,
+            user_id: item.user_id,
+            product_id: item.product_id,
+            quantity: item.quantity,
+            product: allProducts.find(p => p.id === item.product_id),
+            products: allProducts.find(p => p.id === item.product_id)
+          }))
+        : [];
+      setItems(itemsWithProducts);
     } catch (error) {
       console.error('Error fetching cart items:', error);
       toast.error('Failed to load cart');
@@ -85,7 +85,7 @@ export const CartProvider = ({ children }) => {
     setLoading(true);
     try {
       await mockAuth.removeCartItem(itemId);
-      setItems(items.filter(item => item.id !== itemId));
+  setItems(Array.isArray(items) ? items.filter(item => item.id !== itemId) : []);
       toast.success('Item removed from cart');
     } catch (error) {
       console.error('Error removing from cart:', error);
@@ -104,7 +104,7 @@ export const CartProvider = ({ children }) => {
     setLoading(true);
     try {
       await mockAuth.updateCartItem(itemId, quantity);
-      setItems(items.map(item => item.id === itemId ? {...item, quantity} : item));
+  setItems(Array.isArray(items) ? items.map(item => item.id === itemId ? {...item, quantity} : item) : []);
     } catch (error) {
       console.error('Error updating quantity:', error);
       toast.error('Failed to update quantity');
@@ -119,7 +119,7 @@ export const CartProvider = ({ children }) => {
     setLoading(true);
     try {
       await mockAuth.clearCart(user.id);
-      setItems([]);
+  setItems([]);
       toast.success('Cart cleared');
     } catch (error) {
       console.error('Error clearing cart:', error);
@@ -129,20 +129,24 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  
-  const totalPrice = items.reduce((sum, item) => {
-    const product = item.product || item.products;
-    if (!product) return sum;
-    return sum + (product.price * item.quantity);
-  }, 0);
+  const totalItems = Array.isArray(items) ? items.reduce((sum, item) => sum + item.quantity, 0) : 0;
 
-  const totalDiscount = items.reduce((sum, item) => {
-    const product = item.product || item.products;
-    if (!product || !product.discount_percentage) return sum;
-    const discountAmount = (product.price * product.discount_percentage / 100) * item.quantity;
-    return sum + discountAmount;
-  }, 0);
+  const totalPrice = Array.isArray(items)
+    ? items.reduce((sum, item) => {
+        const product = item.product || item.products;
+        if (!product) return sum;
+        return sum + (product.price * item.quantity);
+      }, 0)
+    : 0;
+
+  const totalDiscount = Array.isArray(items)
+    ? items.reduce((sum, item) => {
+        const product = item.product || item.products;
+        if (!product || !product.discount_percentage) return sum;
+        const discountAmount = (product.price * product.discount_percentage / 100) * item.quantity;
+        return sum + discountAmount;
+      }, 0)
+    : 0;
 
   return (
     <CartContext.Provider value={{

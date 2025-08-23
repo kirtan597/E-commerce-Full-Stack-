@@ -55,7 +55,7 @@ export const WishlistProvider = ({ children }) => {
   };
 
   const removeFromWishlist = (productId) => {
-    const newWishlist = wishlistItems.filter(item => item.id !== productId);
+  const newWishlist = Array.isArray(wishlistItems) ? wishlistItems.filter(item => item.id !== productId) : [];
     setWishlistItems(newWishlist);
     saveWishlist(newWishlist);
     toast.success('Removed from wishlist');

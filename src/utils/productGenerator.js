@@ -136,14 +136,14 @@ export const generateProducts = (count = 50) => {
 
 export const getFeaturedProducts = (allProducts, count = 8) => {
   return allProducts
-    .filter(p => p.discount_percentage && p.discount_percentage > 15)
+  .filter(p => p.discount_percentage && p.discount_percentage > 15)
     .sort(() => Math.random() - 0.5)
     .slice(0, count);
 };
 
 export const getTrendingProducts = (allProducts, count = 6) => {
   return allProducts
-    .filter(p => p.stock_quantity < 20)
+  .filter(p => p.stock_quantity < 20)
     .sort(() => Math.random() - 0.5)
     .slice(0, count);
 };

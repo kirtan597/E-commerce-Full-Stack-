@@ -83,7 +83,7 @@ class MockAuthService {
   }
 
   async getCartItems(userId) {
-    return this.cartItems.filter(item => item.user_id === userId);
+  return Array.isArray(this.cartItems) ? this.cartItems.filter(item => item.user_id === userId) : [];
   }
 
   async updateCartItem(itemId, quantity) {
@@ -96,13 +96,13 @@ class MockAuthService {
   }
 
   async removeCartItem(itemId) {
-    this.cartItems = this.cartItems.filter(item => item.id !== itemId);
+  this.cartItems = Array.isArray(this.cartItems) ? this.cartItems.filter(item => item.id !== itemId) : [];
     this.saveToStorage();
     return { error: null };
   }
 
   async clearCart(userId) {
-    this.cartItems = this.cartItems.filter(item => item.user_id !== userId);
+  this.cartItems = Array.isArray(this.cartItems) ? this.cartItems.filter(item => item.user_id !== userId) : [];
     this.saveToStorage();
     return { error: null };
   }

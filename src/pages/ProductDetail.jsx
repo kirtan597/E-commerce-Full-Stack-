@@ -72,7 +72,7 @@ export const ProductDetail = () => {
             </motion.div>
             
             <div className="grid grid-cols-3 gap-4">
-              {product.images.map((image, index) => (
+              {Array.isArray(product.images) && product.images.map((image, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
@@ -94,7 +94,7 @@ export const ProductDetail = () => {
               
               <div className="flex items-center space-x-4 mb-4">
                 <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
+                  {Array.isArray(Array(5)) && [...Array(5)].map((_, i) => (
                     <Star
                       key={i}
                       size={20}
@@ -134,7 +134,7 @@ export const ProductDetail = () => {
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">Key Features</h3>
               <ul className="grid grid-cols-2 gap-2">
-                {product.features.map((feature, index) => (
+                {Array.isArray(product.features) && product.features.map((feature, index) => (
                   <li key={index} className="flex items-center text-gray-600">
                     <div className="w-2 h-2 bg-blue-600 rounded-full mr-3"></div>
                     {feature}

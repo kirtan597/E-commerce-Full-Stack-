@@ -28,7 +28,7 @@ export const SearchSuggestions = ({
             </p>
           </div>
           
-          {suggestions.slice(0, 5).map((product) => (
+          {Array.isArray(suggestions) && suggestions.slice(0, 5).map((product) => (
             <motion.div
               key={product.id}
               whileHover={{ backgroundColor: 'rgba(59, 130, 246, 0.1)' }}

@@ -15,7 +15,7 @@ import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Profile } from './pages/Profile';
 import { Orders } from './pages/Orders';
-import { Admin } from './pages/Admin';
+import Admin from './pages/Admin';
 import { Wishlist } from './pages/Wishlist';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { AdminRoute } from './components/AdminRoute';

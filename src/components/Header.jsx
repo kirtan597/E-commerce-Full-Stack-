@@ -37,10 +37,12 @@ export const Header = () => {
 
   useEffect(() => {
     if (searchQuery.trim().length > 0) {
-      const filtered = allProducts.filter(product =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.category.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+      const filtered = Array.isArray(allProducts)
+        ? allProducts.filter(product =>
+            product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            product.category.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+        : [];
       setSearchSuggestions(filtered);
       setShowSuggestions(true);
     } else {
@@ -123,7 +125,7 @@ export const Header = () => {
                       <div className="p-3 border-b border-gray-200 bg-green-50">
                         <span className="text-green-700 font-medium">✅ {searchSuggestions.length} products available</span>
                       </div>
-                      {searchSuggestions.slice(0, 6).map((product) => (
+                      {Array.isArray(searchSuggestions) && searchSuggestions.slice(0, 6).map((product) => (
                         <div
                           key={product.id}
                           onClick={() => handleSuggestionClick(product)}
@@ -307,7 +309,7 @@ export const Header = () => {
                         <div className="p-3 border-b border-gray-200 bg-green-50">
                           <span className="text-green-700 font-medium">✅ {searchSuggestions.length} products available</span>
                         </div>
-                        {searchSuggestions.slice(0, 6).map((product) => (
+                        {Array.isArray(searchSuggestions) && searchSuggestions.slice(0, 6).map((product) => (
                           <div
                             key={product.id}
                             onClick={() => handleSuggestionClick(product)}

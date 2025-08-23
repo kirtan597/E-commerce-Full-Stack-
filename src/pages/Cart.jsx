@@ -38,7 +38,7 @@ export const Cart = () => {
           {/* Cart Items */}
           <div className="lg:col-span-2">
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden border border-white/20">
-              {items.map((item) => {
+              {Array.isArray(items) && items.map((item) => {
                 const product = item.product || item.products;
                 if (!product) return null;
 
