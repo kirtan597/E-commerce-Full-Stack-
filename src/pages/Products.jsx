@@ -13,7 +13,7 @@ export const Products = () => {
   const [searchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('name');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState('grid');
 
   const searchQuery = searchParams.get('search') || '';
   const products = generateProducts(80); // Always generate products directly
